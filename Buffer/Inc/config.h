@@ -1,0 +1,10 @@
+/* CONFIGURATIONS */
+#define SLOW_BLINK_DELAY 	400
+#define FAST_BLINK_DELAY 	200
+#define DELAY_BOUNCE 		200
+
+/* DEFINITIONS */
+#define LED_SLOW_STATE 		0
+#define LED_FAST_STATE 		1
+#define LED_ON_STATE		2
+#define LED_OFF_STATE 		3
