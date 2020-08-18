@@ -2,6 +2,7 @@
 #define SLOW_BLINK_DELAY 	400
 #define FAST_BLINK_DELAY 	200
 #define DELAY_BOUNCE 		200
+#define RX_BUFFER_SIZE 		5
 
 /* DEFINITIONS */
 #define LED_SLOW_STATE 		0
