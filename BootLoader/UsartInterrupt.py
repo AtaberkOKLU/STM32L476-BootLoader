@@ -1,6 +1,4 @@
 import serial
-from time import sleep
-
 
 # CONFIGURATIONS
 _BAUD_RATE       = 115200
@@ -21,7 +19,7 @@ _UART_SELEC = b'\x7F'
 
 serialPort = serial.Serial(port=_PORT,
                            baudrate=_BAUD_RATE,
-                           timeout=_SERIAL_TIMEOUT, #DISABLE READ TIMEOUT
+                           timeout=_SERIAL_TIMEOUT,
                            stopbits=_STOP_BITS,
                            bytesize=_BYTE_SIZE,
                            parity=_PARITY)

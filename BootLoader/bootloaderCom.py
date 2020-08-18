@@ -40,7 +40,7 @@ ACK_counter = 0
 
 serialPort = serial.Serial(port=_PORT,
                            baudrate=_BAUD_RATE,
-                           timeout=_SERIAL_TIMEOUT, #DISABLE READ TIMEOUT
+                           timeout=_SERIAL_TIMEOUT,
                            stopbits=_STOP_BITS,
                            bytesize=_BYTE_SIZE,
                            parity=_PARITY)
@@ -81,4 +81,3 @@ while True:
         break
     else:
         print(f"{Bcolors.HEADER}Response:", char, f"{Bcolors.ENDC}")
-
