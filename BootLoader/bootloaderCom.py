@@ -46,15 +46,25 @@ serialPort = serial.Serial(port=_PORT,
                            parity=_PARITY)
 
 # serialPort.open()
+# First Step: Trigger The USART1 RX:
+print(f"{Bcolors.HEADER}UART1 RX Interrupt:", _ACK, f"{Bcolors.ENDC}")
+serialPort.write(_ACK)
+sleep(0.5)      # Sleep For 500ms to give some time to device
+
+# Second Step: UARTx Selection Command
 print(f"{Bcolors.OKBLUE}UARTx SELECTION CMD:", _UART_SELEC, f"{Bcolors.ENDC}")
 serialPort.write(_UART_SELEC)
-sleep(1)
+sleep(1)        # Sleep For 1 sec to give some time to human
+
+# Third Step: Comm Check
 char = serialPort.read()
 if char == _ACK:
     print(f"{Bcolors.OKGREEN}Received ACK | UARTx SUCCESS{Bcolors.ENDC}")
 elif char == _NACK:
     print(f"{Bcolors.FAIL}Received NACK | UARTx FAILED{Bcolors.ENDC}")
-sleep(1)
+sleep(1)        # Sleep For 1 sec to give some time to human
+
+# Forth Step: Get Command
 print(f"{Bcolors.OKBLUE}Sending GET CMD:{Bcolors.ENDC}", _GV_CMD)
 serialPort.write(_GV_CMD)
 sleep(1)
@@ -72,4 +82,3 @@ while True:
     else:
         print(f"{Bcolors.HEADER}Response:", char, f"{Bcolors.ENDC}")
 
-serialPort.close()

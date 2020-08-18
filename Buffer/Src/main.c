@@ -46,7 +46,6 @@
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
-DMA_HandleTypeDef hdma_usart1_rx;
 
 /* USER CODE BEGIN PV */
 
@@ -65,7 +64,6 @@ const uint32_t CIPHER_ADDR 	= 0x2000FFF0;		// DO NOT FORGET TO CHANGE IN RESET_H
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_DMA_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
@@ -119,6 +117,7 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 	LED_state = LED_SLOW_STATE;	// INIT with slow blink mode.
+	uint8_t RX_BUFFER[RX_BUFFER_SIZE];
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -139,10 +138,11 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_USART2_UART_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+	__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+	HAL_UART_Receive_IT(&huart1, RX_BUFFER, RX_BUFFER_SIZE);
 	
   /* USER CODE END 2 */
 
@@ -248,14 +248,12 @@ static void MX_USART1_UART_Init(void)
   huart1.Init.BaudRate = 115200;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_EVEN;
+  huart1.Init.Parity = UART_PARITY_NONE;
   huart1.Init.Mode = UART_MODE_TX_RX;
   huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart1.Init.OverSampling = UART_OVERSAMPLING_16;
   huart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_AUTOBAUDRATE_INIT;
-  huart1.AdvancedInit.AutoBaudRateEnable = UART_ADVFEATURE_AUTOBAUDRATE_ENABLE;
-  huart1.AdvancedInit.AutoBaudRateMode = UART_ADVFEATURE_AUTOBAUDRATE_ON0X7FFRAME;
+  huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
   if (HAL_UART_Init(&huart1) != HAL_OK)
   {
     Error_Handler();
@@ -301,22 +299,6 @@ static void MX_USART2_UART_Init(void)
 
 }
 
-/** 
-  * Enable DMA controller clock
-  */
-static void MX_DMA_Init(void) 
-{
-
-  /* DMA controller clock enable */
-  __HAL_RCC_DMA1_CLK_ENABLE();
-
-  /* DMA interrupt init */
-  /* DMA1_Channel5_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
-
-}
-
 /**
   * @brief GPIO Initialization Function
   * @param None
@@ -355,7 +337,13 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+uint8_t rxChar;
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+ __NOP();		// DEBUG BREAKPOINT
+ 
+ /* set up to receive another char */
+ HAL_UART_Receive_IT(&huart1, &rxChar, 1); 
+}
 
 /* USER CODE END 4 */
 

@@ -300,7 +300,7 @@ ARM Macro Assembler    Page 5
   163 00000188         
   164 00000188                 AREA             |.text|, CODE, READONLY
   165 00000000         
-  166 00000000         ; Reset handler
+  166 00000000         ; Reset_Handler
   167 00000000         Reset_Handler
                                PROC
   168 00000000                 EXPORT           Reset_Handler             [WEAK
@@ -314,14 +314,14 @@ ARM Macro Assembler    Page 5
   173 00000002 4911            LDR              R1, =0xA7ABE12C ;  ATABE R K - 
                                                             The MAGIC_CIPHER - 
                                                             32bit - 4 Byte
-  174 00000004 6802            LDR              R2, [R0, #0] ;  Take the value 
-                                                            in the CIPHER_ADDR 
-                                                            to check 
+  174 00000004 6802            LDR              R2, [R0]    ;  Take the value i
+                                                            n the CIPHER_ADDR t
+                                                            o check 
   175 00000006         ;   whether the MAGIC_CIPHER is written
-  176 00000006 6000            STR              R0, [R0, #0] ;  Write itself on
-                                                            to itself to avoid 
-                                                            repetitive triggeri
-                                                            ng
+  176 00000006 6000            STR              R0, [R0]    ;  Write itself ont
+                                                            o itself to avoid r
+                                                            epetitive triggerin
+                                                            g
   177 00000008 428A            CMP              R2, R1      ;  CHECKING PROCCES
 
 
@@ -348,13 +348,13 @@ ARM Macro Assembler    Page 6
   190 00000014 480F            LDR              R0, =0x40021060 ; RCC_APB2ENR
   191 00000016 F04F 0101       LDR              R1, =0x00000001 ; ENABLE SYSCFG
                                                              CLOCK
-  192 0000001A 6001            STR              R1, [R0, #0]
+  192 0000001A 6001            STR              R1, [R0]
   193 0000001C         
   194 0000001C 480E            LDR              R0, =0x40010000 ; SYSCFG_MEMRMP
                                                             
   195 0000001E F04F 0101       LDR              R1, =0x00000001 
                                                             ; MAP ROM AT ZERO
-  196 00000022 6001            STR              R1, [R0, #0]
+  196 00000022 6001            STR              R1, [R0]
   197 00000024 480D            LDR              R0, =0x1FFF0000 ; SYSTEM_MEMORY
                                                             _STARTING_ADDR
   198 00000026 F8D0 D000       LDR              SP,[R0, #0] ; SP @ +0

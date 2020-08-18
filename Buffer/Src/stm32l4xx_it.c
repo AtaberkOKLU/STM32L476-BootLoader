@@ -59,7 +59,6 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-extern DMA_HandleTypeDef hdma_usart1_rx;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 /* USER CODE BEGIN EV */
@@ -206,20 +205,6 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles DMA1 channel5 global interrupt.
-  */
-void DMA1_Channel5_IRQHandler(void)
-{
-  /* USER CODE BEGIN DMA1_Channel5_IRQn 0 */
-	
-  /* USER CODE END DMA1_Channel5_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_usart1_rx);
-  /* USER CODE BEGIN DMA1_Channel5_IRQn 1 */
-	Reset2BootLoader();
-  /* USER CODE END DMA1_Channel5_IRQn 1 */
-}
-
-/**
   * @brief This function handles USART1 global interrupt.
   */
 void USART1_IRQHandler(void)
@@ -231,10 +216,7 @@ void USART1_IRQHandler(void)
   HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART1_IRQn 1 */
 	
-	if(__HAL_UART_GET_IT(&huart1, UART_IT_RXNE) != RESET)
-    {
-			Reset2BootLoader();
-		}
+		Reset2BootLoader();
 
   /* USER CODE END USART1_IRQn 1 */
 }
@@ -264,13 +246,11 @@ void EXTI15_10_IRQHandler(void)
   /* USER CODE END EXTI15_10_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
   /* USER CODE BEGIN EXTI15_10_IRQn 1 */
-/*
+
 	if(LED_state == LED_ON_STATE) 
 			LED_state = LED_SLOW_STATE;
 	else LED_state++;
-*/
-	Reset2BootLoader();
-	
+
   /* USER CODE END EXTI15_10_IRQn 1 */
 }
 
